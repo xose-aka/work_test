@@ -23,7 +23,7 @@ Route::view('login', 'login')->name('login');
 Route::get('logout',        [LoginController::class, 'logout'])->name('logout');
 Route::post('authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
 
-Route::middleware('admin')
+Route::middleware('role:admin')
      ->prefix('admin')
      ->name('admin.')
      ->namespace('Admin')
