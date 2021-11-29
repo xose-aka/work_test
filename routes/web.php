@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -26,10 +27,11 @@ Route::post('authenticate', [LoginController::class, 'authenticate'])->name('aut
 Route::middleware('role:admin')
      ->prefix('admin')
      ->name('admin.')
-     ->namespace('Admin')
      ->group(function (Router $router) {
 
         $router->view('dashboard', 'admin.layout')->name('dashboard');
+
+        $router->resource('user', UserController::class);
 
         $router->get('products', [ProductController::class, 'index'])->name('products');
 
