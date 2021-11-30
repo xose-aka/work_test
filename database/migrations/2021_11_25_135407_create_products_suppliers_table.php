@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductSupplierTable extends Migration
+class CreateProductsSuppliersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,16 +15,20 @@ class CreateProductSupplierTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_supplier', function (Blueprint $table) {
+        Schema::create('products_suppliers', function (Blueprint $table) {
+
             $table->id();
-            $table->foreignIdFor(Supplier::class);
-            $table->foreignIdFor(Product::class);
+            $table->string('nome');
             $table->string('code');
-            $table->integer('price_dollar');
-            $table->integer('price_euro');
+            $table->text('description');
+            $table->double('price');
+            $table->integer('stock');
+            $table->double('shipping_cost')->nullable();
+            $table->string('category');
+            $table->string('brand');
+            $table->bigInteger('ean');
             $table->timestamps();
 
-            $table->foreign('supplier_id')->references('id')->on('suppliers');
         });
     }
 

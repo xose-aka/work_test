@@ -34,7 +34,7 @@ class SupplierController extends Controller
 
     /**
      * @param StoreSupplierRequest $request
-     * @return Application|Factory|View|RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreSupplierRequest $request)
     {

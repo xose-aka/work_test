@@ -53,7 +53,11 @@ class SupplierService
                     if ($r === 1)
                         $cols[] = str_replace(' ', '_', strtolower($row[$c]));
                     else {
-                        $cols[$result[0][$c]] = utf8_encode($row[$c]);
+                        if (is_numeric($row[$c])) {
+                            $cols[$result[0][$c]] = utf8_encode((int) $row[$c]);
+                        }
+                        else
+                            $cols[$result[0][$c]] = utf8_encode($row[$c]);
                     }
                 }
                 $result[] = $cols;
