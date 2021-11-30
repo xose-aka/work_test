@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets/admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('assets/admin/css/style.css') }}" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -46,6 +48,20 @@
             <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Main
+        </div>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ route('admin.supplier.index') }}">
+                <i class="fas fa-fw fa-industry"></i>
+                <span>Suppliers</span></a>
         </li>
 
         <!-- Divider -->
@@ -391,6 +407,7 @@
 <!-- Page level plugins -->
 {{--<script src="vendor/chart.js/Chart.min.js"></script>--}}
 
+@stack('script')
 
 </body>
 

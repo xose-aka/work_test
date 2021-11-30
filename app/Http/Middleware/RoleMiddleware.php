@@ -18,6 +18,9 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role, $permission = null)
     {
+        if (!auth()->check())
+            return redirect()->route('login');
+
         if(!$request->user()->hasRole($role)) {
             abort(404);
         }

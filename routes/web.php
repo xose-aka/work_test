@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Routing\Router;
@@ -32,7 +33,9 @@ Route::middleware('role:admin')
         $router->view('dashboard', 'admin.layout')->name('dashboard');
 
         $router->resource('user', UserController::class);
+        $router->resource('supplier', SupplierController::class);
 
         $router->get('products', [ProductController::class, 'index'])->name('products');
+
 
 });
