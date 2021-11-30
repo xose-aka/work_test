@@ -53,8 +53,7 @@ class SupplierService
                     if ($r === 1)
                         $cols[] = str_replace(' ', '_', strtolower($row[$c]));
                     else {
-                        $cols[$result[0][$c]] = $row[$c];
-
+                        $cols[$result[0][$c]] = utf8_encode($row[$c]);
                     }
                 }
                 $result[] = $cols;
@@ -77,7 +76,7 @@ class SupplierService
             $table->increments('id');
 
             foreach ($this->fields as $field) {
-                $table->string($field);
+                $table->text($field);
             }
             $table->timestamps();
         });
