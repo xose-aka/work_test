@@ -64,6 +64,7 @@ class SupplierController extends Controller
 
     public function update(Request $request, $id)
     {
+//        dd($request->file('file')->getErrorMessage());
         $request->validate([
             'title' => 'required',
             'slug'  => 'required'
@@ -80,9 +81,11 @@ class SupplierController extends Controller
             if ($request->hasFile('file')) {
                 $supplierService = SupplierService::getInstance();
 
-                $supplierService->supplierCSV($request->file('file'));
+                $supplierService->supplierCatalogStore($request->file('file'), $id);
             }
         }
+
+        return redirect()->route('admin.supplier.index')->with(['success' => 'Successfully updated!']);
 
     }
 
