@@ -38,6 +38,7 @@ class MergeTwoSuppliers extends Command
      */
     public function handle()
     {
+//        DB::disableQueryLog();
 //        $supplier_1 = DB::table('supplier_1')
 //            ->select('codart as code', 'descrizione_aggiuntiva as nome', 'descrizione_articolo as description',
 //                DB::raw("CAST(prezzolistino AS DECIMAL(10, 2)) AS price"),
@@ -47,6 +48,17 @@ class MergeTwoSuppliers extends Command
 //                'categoria as category', 'descrizione_marca as brand')
 //            ->get()->toArray();
 //
+//
+//        $supplier_1 = array_map(function ($value) {
+//            return (array)$value;
+//        }, $supplier_1);
+//
+//        foreach (array_chunk($supplier_1,1000) as $chunk_data) {
+//            DB::table('products_suppliers')->insert($chunk_data);
+//        }
+//
+//        unset($supplier_1);
+//
 //        $supplier_2 = DB::table('supplier_2')
 //            ->select('codice as code', 'nome as nome', 'descrizione as description',
 //                DB::raw("CAST(prezzo AS DECIMAL(10, 2)) AS price"),
@@ -55,19 +67,37 @@ class MergeTwoSuppliers extends Command
 //                'categoria as category', 'produttore as brand')
 //            ->get()->toArray();
 //
-//        $supplier_1 = array_map(function ($value) {
-//            return (array)$value;
-//        }, $supplier_1);
-//
-//        DB::table('products_suppliers')->insert($supplier_1);
-//
 //        $supplier_2 = array_map(function ($value) {
 //            return (array)$value;
 //        }, $supplier_2);
 //
-//        foreach (array_chunk($supplier_2,100) as $chunk_data) {
+//        foreach (array_chunk($supplier_2,1000) as $chunk_data) {
 //            DB::table('products_suppliers')->insert($chunk_data);
 //        }
+//
+//        unset($supplier_2);
+//
+//
+        $products = DB::table('products_suppliers')
+                        ->select('nome AS name', 'code', 'description', 'price', 'stock', 'shipping_cost', 'category', 'brand', 'products_suppliers.ean')
+                        ->join(
+                                DB::raw('(SELECT ean , MIN(price) MinPrice
+                                                FROM products_suppliers
+                                                GROUP BY ean) grouped'),
+                                function ($join) {
+                                    $join->on('products_suppliers.ean', '=', 'grouped.ean')
+                                         ->on('products_suppliers.price', '=', 'grouped.MinPrice');
+                                })
+                        ->get()->toArray();
+
+//        dd(count($products));
+//
+        $products = array_map(function ($value) {
+            return (array)$value;
+        }, $products);
+
+        foreach (array_chunk($products,500) as $chunk_data)
+            DB::table('products2')->upsert($chunk_data, 'ean');
 
 //        $duplicates = DB::table('products_suppliers')
 //            ->select('ean', (DB::raw('COUNT(ean)')))
@@ -75,19 +105,6 @@ class MergeTwoSuppliers extends Command
 //            ->havingRaw('COUNT(ean) > 1')
 //            ->get();
 //        dd($duplicates);
-
-        $callback = DB::table('supplier_1')->select('ean')->get()->toArray();
-//        dd($callback);
-
-        $eans = [];
-        foreach ($callback as $ean)
-            $eans[] = $ean->ean;
-
-        dd($ean);
-
-//        $callback = DB::table('products_suppliers')->groupBy('ean')->take(10)->get();
-//        dd($callback);
-
         return Command::SUCCESS;
     }
 }
